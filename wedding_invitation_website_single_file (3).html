@@ -1,0 +1,324 @@
+<!--
+Interactive Wedding Invitation Website (Navy Blue & Gold)
+Couple: Chesther Paul Chu & Paul Chu Chesther
+Date: December 31, 2025
+
+Notes for you:
+- This file is a single-page site. To make the QR and link work for guests, host this file on a web host (Netlify, Vercel, GitHub Pages, or any shared hosting) and set PUBLIC_LINK to your real domain (example: https://your-wedding-site.com).
+- Admin view: open the site with ?admin=1&key=inviteAdmin2025 to view, filter, and export RSVPs.
+- QR encodes PUBLIC_LINK by default (a .com placeholder). Replace PUBLIC_LINK with your real hosted URL to make the QR lead guests to the live page.
+-->
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Wedding Invitation — Chesther & Paul</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --accent:#d4af37; /* gold */
+      --bg:#0b1d3a;    /* navy blue */
+      --card:#11244a;
+      --light:#f8f7f3;
+      --muted:#b1b1b1;
+    }
+    *{box-sizing:border-box}
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;margin:0;background:var(--bg);color:var(--light);line-height:1.5;}
+    .container{max-width:1100px;margin:36px auto;padding:20px}
+    .card{background:var(--card);border-radius:18px;box-shadow:0 8px 30px rgba(0,0,0,0.45);overflow:hidden;border:1px solid rgba(212,175,55,0.18)}
+    .hero{display:grid;grid-template-columns:1fr 380px;gap:24px;padding:36px}
+    h1{font-family:'Playfair Display',serif;font-size:44px;margin:6px 0;color:var(--accent)}
+    .sub{color:var(--light);font-weight:500;margin-bottom:12px}
+    .meta .pill{background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.28);padding:8px 12px;border-radius:999px;color:var(--accent);font-weight:600}
+
+    .details{margin-top:18px}
+    .event-card{background:#0f1e3c;border:1px solid rgba(212,175,55,0.12);padding:14px;border-radius:10px;margin-bottom:12px}
+    .event-card strong{color:var(--accent)}
+
+    form.rsvp{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+    input,textarea,select{background:#0d1b36;color:var(--light);border:1px solid rgba(212,175,55,0.12);padding:10px;border-radius:8px}
+    .actions{display:flex;gap:8px}
+    button{cursor:pointer;border:0;padding:10px 14px;border-radius:10px;font-weight:600}
+    .btn-primary{background:var(--accent);color:#08203a}
+    .btn-ghost{background:transparent;border:1px solid var(--accent);color:var(--accent)}
+
+    .card-right{background:#0d1b36;border-left:1px solid rgba(212,175,55,0.08);padding:22px;border-radius:0 18px 18px 0;text-align:center}
+    .small{font-size:13px;color:var(--muted)}
+    #qrcode{background:#ffffff;padding:10px;border-radius:12px;display:inline-block}
+    .link-display{margin-top:8px;word-break:break-all;color:var(--light);background:rgba(255,255,255,0.03);padding:8px;border-radius:8px}
+
+    /* Admin area */
+    .admin{padding:18px;background:#071329;border-top:1px solid rgba(255,255,255,0.02)}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.04);text-align:left}
+    th{color:var(--accent)}
+
+    footer{text-align:center;padding:16px;font-size:13px;color:var(--muted)}
+    @media(max-width:980px){.hero{grid-template-columns:1fr}.card-right{border-left:none;border-top:1px solid rgba(212,175,55,0.08);border-radius:0 0 18px 18px}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="hero">
+        <div>
+          <div class="small">You are warmly invited to celebrate the union of</div>
+          <h1>Chesther Paul Chu &amp; Paul Chu Chesther</h1>
+          <div class="sub">Wednesday, December 31, 2025 • 4:00 PM</div>
+          <div class="meta" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+            <div class="pill">St. Michael's Chapel</div>
+            <div class="pill">Reception: Hacienda Verde</div>
+          </div>
+
+          <div class="details">
+            <div class="event-card">
+              <strong>Ceremony</strong>
+              <div class="small">4:00 PM — St. Michael's Chapel, 123 Mabini Ave</div>
+              <p class="small">Formal attire requested. Please arrive early.</p>
+            </div>
+            <div class="event-card">
+              <strong>Reception</strong>
+              <div class="small">6:00 PM — Hacienda Verde, 45 Orchard Road</div>
+              <p class="small">Dinner and celebration to follow.</p>
+            </div>
+
+            <strong>RSVP</strong>
+            <form class="rsvp" id="rsvpForm">
+              <input type="text" id="name" placeholder="Full name" required>
+              <input type="email" id="email" placeholder="Email (optional)">
+              <label class="small"><input type="radio" name="attend" value="yes" checked> Will attend</label>
+              <label class="small"><input type="radio" name="attend" value="no"> Cannot attend</label>
+              <select id="guests" aria-label="Number of guests">
+                <option value="1">1 (just me)</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <textarea id="message" rows="3" placeholder="Dietary requirements or message (optional)"></textarea>
+              <div class="actions">
+                <button type="submit" class="btn-primary">Send RSVP</button>
+                <button type="button" id="clearLocal" class="btn-ghost">Clear my local RSVP</button>
+              </div>
+              <div id="rsvpResult" class="small" style="display:none;color:var(--accent);">RSVP saved. Thank you!</div>
+            </form>
+          </div>
+        </div>
+
+        <div class="card-right">
+          <h2 style="color:var(--accent);font-family:'Playfair Display',serif">QR Invitation</h2>
+          <div class="small">Scan to open the invitation link</div>
+          <div id="qrcode" style="margin:16px auto"></div>
+          <div class="link-display" id="linkDisplay"></div>
+          <div style="margin-top:10px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap">
+            <button id="downloadQr" class="btn-primary">Download QR</button>
+            <button id="copyLink" class="btn-ghost">Copy Link</button>
+            <button id="shareNative" class="btn-ghost">Share</button>
+          </div>
+          <div class="small" style="margin-top:10px;color:var(--muted)">Tip: Host the file and replace PUBLIC_LINK with your real domain to make the QR point to the live site.</div>
+        </div>
+      </div>
+
+      <!-- Admin area rendered only when admin params provided -->
+      <div id="adminArea" class="admin" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+          <div>
+            <strong style="color:var(--accent)">Admin — RSVP Responses</strong>
+            <div class="small">View and manage collected RSVPs</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <label class="small">Filter:</label>
+            <select id="filterStatus">
+              <option value="all">All</option>
+              <option value="yes">Will attend</option>
+              <option value="no">Cannot attend</option>
+            </select>
+            <button id="exportCsv" class="btn-ghost">Export CSV</button>
+            <button id="deleteAll" class="btn-ghost">Delete All</button>
+          </div>
+        </div>
+        <div style="margin-top:14px;overflow:auto;max-height:320px">
+          <table id="rsvpTable"><thead><tr><th>Name</th><th>Email</th><th>Attend</th><th>Guests</th><th>Message</th><th>Time</th></tr></thead><tbody></tbody></table>
+        </div>
+        <div style="margin-top:12px;color:var(--muted)" class="small">Admin key is checked via URL param (see top comment). Keep this secret.</div>
+      </div>
+
+      <footer>© 2025 Chesther & Paul — Save the Date: December 31, 2025</footer>
+    </div>
+  </div>
+
+  <!-- QRCode.js -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script>
+    /******************* CONFIG *******************/
+    // IMPORTANT: replace this with your actual hosted domain (https://your-domain.com) after you upload this file to a web host.
+    const PUBLIC_LINK = 'https://chestherpaul2025.com'; // <-- change this to your real .com domain when hosted
+
+    // Admin key (simple client-side protection). To open admin view: https://your-domain.com/?admin=1&key=inviteAdmin2025
+    const ADMIN_KEY = 'inviteAdmin2025';
+    /**********************************************/
+
+    // Elements
+    const qrcodeContainer = document.getElementById('qrcode');
+    const linkDisplay = document.getElementById('linkDisplay');
+
+    // Use PUBLIC_LINK if it looks like an absolute URL, otherwise fallback to window.location.href
+    const parsedLink = (typeof PUBLIC_LINK === 'string' && PUBLIC_LINK.startsWith('http')) ? PUBLIC_LINK : window.location.href;
+
+    function generateQRCode(link){
+      qrcodeContainer.innerHTML = '';
+      // Use strong contrast to ensure scannability
+      new QRCode(qrcodeContainer, {
+        text: link,
+        width: 260,
+        height: 260,
+        colorDark: '#000000',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.H
+      });
+      // Show the link visibly and make sure it ends with .com (if PUBLIC_LINK set)
+      linkDisplay.innerHTML = '<a href="'+link+'" target="_blank" rel="noopener noreferrer" style="color:var(--light)">'+link+'</a>';
+    }
+
+    generateQRCode(parsedLink);
+
+    // Copy link
+    document.getElementById('copyLink').addEventListener('click', async ()=>{
+      try{
+        await navigator.clipboard.writeText(parsedLink);
+        alert('Invitation link copied to clipboard: ' + parsedLink);
+      }catch(e){
+        prompt('Copy this link:', parsedLink);
+      }
+    });
+
+    // Native share (mobile)
+    document.getElementById('shareNative').addEventListener('click', async ()=>{
+      if(navigator.share){
+        try{ await navigator.share({title:'Wedding Invitation',text:'Join us — Chesther & Paul',url:parsedLink}); }
+        catch(e){ alert('Share canceled or failed'); }
+      } else {
+        alert('Sharing not supported on this device. Use the Copy Link button.');
+      }
+    });
+
+    // Download QR
+    document.getElementById('downloadQr').addEventListener('click', ()=>{
+      const img = qrcodeContainer.querySelector('img') || qrcodeContainer.querySelector('canvas');
+      if(!img) return alert('QR not generated yet');
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const w = img.naturalWidth || img.width;
+      const h = img.naturalHeight || img.height;
+      canvas.width = w; canvas.height = h;
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,w,h);
+      ctx.drawImage(img,0,0);
+      const a = document.createElement('a'); a.href = canvas.toDataURL('image/png'); a.download = 'wedding-qr.png'; a.click();
+    });
+
+    // RSVP handling
+    const form = document.getElementById('rsvpForm');
+    const resultMsg = document.getElementById('rsvpResult');
+
+    function loadRSVPs(){
+      try{ return JSON.parse(localStorage.getItem('rsvps')||'[]'); }catch(e){ return []; }
+    }
+    function saveRSVPs(arr){ localStorage.setItem('rsvps', JSON.stringify(arr)); }
+
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const attend = document.querySelector('input[name=attend]:checked').value;
+      const guests = document.getElementById('guests').value;
+      const msg = document.getElementById('message').value.trim();
+      const entry = {name,email,attend,guests,msg,time:new Date().toISOString()};
+      const arr = loadRSVPs();
+      arr.push(entry);
+      saveRSVPs(arr);
+
+      // Show confirmation
+      resultMsg.style.display = 'block';
+      setTimeout(()=> resultMsg.style.display='none', 3000);
+      form.reset();
+
+      // If admin is open on same browser, refresh table
+      if(window.adminOpen) renderAdminTable();
+    });
+
+    // Clear user's local RSVP (removes entries matching name/email from localStorage)
+    document.getElementById('clearLocal').addEventListener('click', ()=>{
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      if(!name && !email) return alert('Enter your name or email to clear your RSVP locally.');
+      let arr = loadRSVPs();
+      arr = arr.filter(r=> !(r.name===name || (email && r.email===email)));
+      saveRSVPs(arr);
+      alert('Matching local RSVPs removed.');
+      if(window.adminOpen) renderAdminTable();
+    });
+
+    // Admin functions
+    const urlParams = new URLSearchParams(window.location.search);
+    const isAdmin = urlParams.get('admin') === '1' && urlParams.get('key') === ADMIN_KEY;
+    if(isAdmin){
+      document.getElementById('adminArea').style.display='block';
+      window.adminOpen = true;
+      renderAdminTable();
+    }
+
+    function renderAdminTable(){
+      const tbody = document.querySelector('#rsvpTable tbody');
+      tbody.innerHTML = '';
+      const arr = loadRSVPs();
+      const filter = document.getElementById('filterStatus') ? document.getElementById('filterStatus').value : 'all';
+      const filtered = arr.filter(r=> filter==='all' ? true : r.attend===filter);
+      filtered.sort((a,b)=> new Date(b.time)-new Date(a.time));
+      filtered.forEach(r=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = '<td>'+escapeHtml(r.name)+'</td>'+
+                       '<td>'+(r.email?escapeHtml(r.email):'—')+'</td>'+
+                       '<td>'+(r.attend==='yes'? 'Will attend' : 'Cannot attend')+'</td>'+
+                       '<td>'+escapeHtml(r.guests || '1')+'</td>'+
+                       '<td>'+escapeHtml(r.msg || '')+'</td>'+
+                       '<td>'+new Date(r.time).toLocaleString()+'</td>';
+        tbody.appendChild(tr);
+      });
+      // update counts display
+      // (could be extended)
+    }
+
+    // Export CSV
+    document.getElementById('exportCsv').addEventListener('click', ()=>{
+      const arr = loadRSVPs();
+      if(arr.length===0) return alert('No RSVPs to export');
+      const rows = [['Name','Email','Attend','Guests','Message','Time']];
+      arr.forEach(r=> rows.push([r.name||'',r.email||'',r.attend||'',r.guests||'',r.msg||'',r.time||'']));
+      const csv = rows.map(r=> r.map(cell=> '"'+String(cell).replace(/"/g,'""')+'"').join(',')).join('\n');
+      const blob = new Blob([csv], {type:'text/csv'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'rsvps.csv';
+      a.click();
+    });
+
+    // Delete all
+    document.getElementById('deleteAll').addEventListener('click', ()=>{
+      if(!confirm('Delete ALL RSVP entries? This cannot be undone.')) return;
+      localStorage.removeItem('rsvps');
+      renderAdminTable();
+      alert('All RSVPs deleted from this browser.');
+    });
+
+    document.getElementById('filterStatus')?.addEventListener('change', renderAdminTable);
+
+    // Utility: escape HTML
+    function escapeHtml(s){ if(!s) return ''; return s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+
+    // If site is hosted and you want server-side storage, replace localStorage parts with AJAX to your backend.
+  </script>
+</body>
+</html>
